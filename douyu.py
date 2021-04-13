@@ -7,11 +7,17 @@ __author__ = '张勇'
 from selenium import webdriver
 import time
 
+options = webdriver.ChromeOptions()
+prefs = {}
+prefs['profile.managed_default_content_settings.images'] = 2
+options.add_experimental_option('prefs', prefs)
+
+
 class Douyu (object):
 
     def __init__(self):
         self.url = 'https://www.douyu.com/directory/all'
-        self.driver = webdriver.Chrome()
+        self.driver = webdriver.Chrome(options=options)
 
     def parse_data(self):
         time.sleep(3)
@@ -23,7 +29,6 @@ class Douyu (object):
         for room in room_list:
             try:
                 temp = {}
-
                 temp['title'] = room.find_element_by_xpath('./div[2]/div[1]/h3').text
                 temp['type'] = room.find_element_by_xpath('./div[2]/div[1]/span').text
                 temp['owner'] = room.find_element_by_xpath('./div[2]/div[2]/h2/div').text
@@ -45,6 +50,8 @@ class Douyu (object):
         self.driver.get(self.url)
         while True:
             # parse
+            self.driver.execute_script('scrollTo(0,1000000)')
+            time.sleep(1)
             data_list = self.parse_data()
             # save
             self.save_data(data_list)
@@ -56,7 +63,7 @@ class Douyu (object):
             else:
                 break
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     douyu = Douyu()
     douyu.run()
