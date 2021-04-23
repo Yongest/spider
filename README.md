@@ -17,3 +17,5 @@ https://www.cnblogs.com/hisweety/p/13324146.html
     防火墙开启 27017端口
     云服务器安全组出入规则 开启27017 端口
     pip3 install pymongo===3.6.1  #目标服务器积极拒绝连接,使用稳定版本pymongo
+
+### 启动： scrapy crawl itcast --nolog
