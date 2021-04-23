@@ -10,6 +10,8 @@ url = 'http://www.baidu.com'
 headers = {
 
 }
+
+
 def main():
     response = requests.get(url, headers=headers)
     print(response.content.decode())
@@ -18,3 +20,4 @@ def main():
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     main()
+
