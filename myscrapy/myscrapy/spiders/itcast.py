@@ -1,6 +1,6 @@
 # coding=utf-8
 import scrapy
-
+from myscrapy.items import MyscrapyItem
 
 class ItcastSpider(scrapy.Spider):
     name = 'itcast'
@@ -13,12 +13,13 @@ class ItcastSpider(scrapy.Spider):
         node_list = response.xpath('//div[@class="li_txt"]')
         # print(len(node_list))
         for node in node_list:
-            temp = {}
+
+            item = MyscrapyItem()
             # xpath 方法返回的是选择器对象列表、extract()用于从选择器对象中提取数据
-            temp['name'] = node.xpath('./h3/text()').extract_first()
-            temp['title'] = node.xpath('./h4/text()')[0].extract()
-            temp['desc'] = node.xpath('./p/text()')[0].extract()
+            item['name'] = node.xpath('./h3/text()').extract_first()
+            item['title'] = node.xpath('./h4/text()')[0].extract()
+            item['desc'] = node.xpath('./p/text()')[0].extract()
             # print(temp)
-            yield temp
+            yield item
 
         pass

@@ -14,7 +14,8 @@ class MyscrapyPipeline:
         self.file = open('itcast.json', 'w')
 
     def process_item(self, item, spider):
-
+        # 将item对象强转字典 ,只能在scrapy 中使用
+        item = dict(item)
         # 将字典数据序列化，string
         json_data = json.dumps(item, ensure_ascii=True) + ',\n'
         # 写入文件
