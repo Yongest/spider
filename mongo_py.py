@@ -9,21 +9,18 @@ import config
 import time
 client = MongoClient(config.host, config.port)
 # 1.无权限认证
-# col = client['test']['user']
+# col = client[config.db][config.collection]
 
 # 2.权限认证
 # 选择一个数据库
 db = client['admin']
 db.authenticate(config.username, config.password)
 # 选择一个集合
-col = client[config.db][config.collection]
-
+col = client['test']['job']
 
 def main():
 
-    # print(col.find({'name': 7725510}).explain())
-    print(col.find({'name': 7725510}))
-    for data in col.find({'name': 7725510}):
+    for data in col.find().limit(3000):
         print(data)
 
 
