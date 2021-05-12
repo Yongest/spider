@@ -23,7 +23,7 @@ col = client['test']['job']
 
 
 class WangyiPipeline:
-    def __init__(self):
+    def open_spider(self, spider):
         self.file = open('job.json', 'w')
 
     def process_item(self, item, spider):
@@ -33,5 +33,5 @@ class WangyiPipeline:
         self.file.write(json_data)
         return item
 
-    def __del__(self):
+    def close_spider(self, spider):
         self.file.close()

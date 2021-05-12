@@ -1,4 +1,4 @@
-# Scrapy settings for myscrapy project
+# Scrapy settings for github project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,14 +7,14 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'myscrapy'
+BOT_NAME = 'github'
 
-SPIDER_MODULES = ['myscrapy.spiders']
-NEWSPIDER_MODULE = 'myscrapy.spiders'
+SPIDER_MODULES = ['github.spiders']
+NEWSPIDER_MODULE = 'github.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'myscrapy (+http://www.yourdomain.com)'
+#USER_AGENT = 'github (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -31,29 +31,27 @@ ROBOTSTXT_OBEY = False
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-#COOKIES_ENABLED = False
-
+# COOKIES_ENABLED = False
+COOKIES_DEBUG=True
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
-DEFAULT_REQUEST_HEADERS = {
-  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-  'Accept-Language': 'en',
-   'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3868.400 QQBrowser/10.8.4394.400',
-   'referer':'https://www.jiazhuangpei.com/combo/combo_list?type_id=1&page=1',
-}
+#DEFAULT_REQUEST_HEADERS = {
+#   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+#   'Accept-Language': 'en',
+#}
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'myscrapy.middlewares.MyscrapySpiderMiddleware': 543,
+#    'github.middlewares.GithubSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'myscrapy.middlewares.MyscrapyDownloaderMiddleware': 543,
+#    'github.middlewares.GithubDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -64,9 +62,9 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-   'myscrapy.pipelines.MyscrapyPipeline': 300,
-}
+#ITEM_PIPELINES = {
+#    'github.pipelines.GithubPipeline': 300,
+#}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

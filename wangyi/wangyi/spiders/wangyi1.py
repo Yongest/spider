@@ -2,6 +2,7 @@ import scrapy
 
 from wangyi.items import WangyiItem
 
+
 class Wangyi1Spider(scrapy.Spider):
     name = 'wangyi1'
     allowed_domains = ['hr.163.com']
@@ -23,9 +24,9 @@ class Wangyi1Spider(scrapy.Spider):
                 item["num"] = node.xpath('./td[6]/text()').extract_first().strip()
                 item["date"] = node.xpath('./td[7]/text()').extract_first()
                 yield scrapy.Request(
-                    url = 'https://hr.163.com'+item['link'],
-                    callback = self.parse_detail,
-                    meta = {"item": item}
+                    url='https://hr.163.com'+item['link'],
+                    callback=self.parse_detail,
+                    meta={"item": item}
                 )
         # 提取下一页的href
         next_url = response.xpath('//a[contains(text(),">")]/@href').extract_first()
