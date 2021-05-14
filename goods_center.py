@@ -17,13 +17,16 @@ headers = {
 
 
 def get(url):
-    return requests.get(domain+url,headers=headers)
+    return requests.get(domain+url,headers=headers,timeout=30)
 
 
 index0 = 1
-jsonfile = open('goods.json', 'w' , encoding='utf-8')
-big_obj = []
+
+
 while True:
+    err_link = []
+    jsonfile = open('./data/new_goods_' + str(index0) + '.json', 'w', encoding='utf-8')
+    step_arr = []
     response = get('/to-kzz/search?ob=default&page='+str(index0)+'#page_anchor')
     print('页开始第几页：',index0)
     # while True:
@@ -43,69 +46,70 @@ while True:
         try:
             response_detail = response_detail_origin.content.decode()
             detail = etree.HTML(response_detail)
-            obj["default_code"] = detail.xpath('//p[@class="goods_code"]/text()')[0]  # 编码，SKU(必填)
-            obj["vr_link"] = detail.xpath('//div[@class="VR_btn"]/a/@href')  # vr 链接
-            obj["brand"] = detail.xpath('//span[@class="brand_name fl"]/text()')[0]  # 品牌
-            obj["brand_link"] = detail.xpath('//a[@class="brand_link fl"]/@href')[0]  # 品牌系列链接
-            obj["name"] = detail.xpath('//div[@class="top_r fr"]/h3/text()')[0]  # 产品名称
+        except:
+            print(detail,'orror------------')
+            err_link.append(obj['sale_link'])
 
 
-            # 获取参数 S
-            params_div_node_list = detail.xpath('//div[@class="attr_table_box"]/div[@class="table_item"]')  # 参数列表节点,table_div
-            obj['params'] = params_list = []
-            if len(params_div_node_list):
-                for table_div in params_div_node_list:
-                    params = {}
-                    params['list'] = list = []
-                    tr_list = table_div.xpath('./table/tr')
+        obj["default_code"] = detail.xpath('//p[@class="goods_code"]/text()')[0]  # 编码，SKU(必填)
+        obj["vr_link"] = detail.xpath('//div[@class="VR_btn"]/a/@href')  # vr 链接
+        obj["brand"] = detail.xpath('//span[@class="brand_name fl"]/text()')[0]  # 品牌
+        obj["brand_link"] = detail.xpath('//a[@class="brand_link fl"]/@href')[0]  # 品牌系列链接
+        obj["name"] = detail.xpath('//div[@class="top_r fr"]/h3/text()')[0]  # 产品名称
 
-                    # print(tr_list)
+        # 2.获取参数 S
+        # params_div_node_list = detail.xpath('//div[@class="attr_table_box"]/div[@class="table_item"]')  # 参数列表节点,table_div
+        # obj['params'] = params_list = []
+        # if len(params_div_node_list):
+        #     for table_div in params_div_node_list:
+        #         params = {}
+        #         params['list'] = list = []
+        #         tr_list = table_div.xpath('./table/tr')
+        #
+        #         # print(tr_list)
+        #
+        #         for index, tr in enumerate(tr_list):
+        #             # print(index,tr)
+        #
+        #             if index == 0:
+        #                 title = tr.xpath('./th[1]/text()')[0]
+        #                 params['title'] = title
+        #             else:
+        #                 params_obj = {}
+        #                 params_obj["name"] = tr.xpath('./td[1]/text()')[0]
+        #                 if tr.xpath('./td[2]/a'):
+        #                     if tr.xpath('./td[2]/a/span'):
+        #                         params_obj["value"] = tr.xpath('./td[2]/a/span/text()')[0]
+        #                     else:
+        #                         params_obj["value"] = tr.xpath('./td[2]/a/text()')[0]
+        #
+        #                 else:
+        #                     if tr.xpath('./td[2]/text()'):
+        #                         params_obj["value"] = tr.xpath('./td[2]/text()')[0]
+        #                     else:
+        #                         params_obj["value"] = ''
+        #                 list.append(params_obj)
+        #
+        #         params_list.append(params)
+        # 2.获取参数 E
 
-                    for index, tr in enumerate(tr_list):
-                        # print(index,tr)
 
-                        if index == 0:
-                            title =tr.xpath('./th[1]/text()')[0]
-                            params['title'] = title
-                        else:
-                            params_obj = {}
-                            params_obj["name"] = tr.xpath('./td[1]/text()')[0]
-                            if tr.xpath('./td[2]/a'):
-                                if tr.xpath('./td[2]/a/span'):
-                                    params_obj["value"] = tr.xpath('./td[2]/a/span/text()')[0]
-                                else:
-                                    params_obj["value"] = tr.xpath('./td[2]/a/text()')[0]
 
-                            else:
-                                if tr.xpath('./td[2]/text()'):
-                                    params_obj["value"] = tr.xpath('./td[2]/text()')[0]
-                                else:
-                                    params_obj["value"] = ''
-                            list.append(params_obj)
+        # 3.获取对应的产品的规格、型号、颜色、编码、价格
+        # goods_json = re.findall(r'var goods_list =(.*?);', response_detail)
+        # goods_json_arr = []
+        # if len(goods_json):
+        #     try:
+        #         for goods_item in goods_json:
+        #             goods_json_arr.append(json.loads(goods_item))
+        #     except:
+        #         err_link.append(obj["sale_link"])
+        # goods_json_str = json.dumps(goods_json_arr, ensure_ascii=False, )
+        # obj['goods_list'] = json.loads(goods_json_str)
 
-                    params_list.append(params)
+        step_arr.append(obj)
 
-            # 获取参数 E
-
-            # 获取对应的产品的规格、型号、颜色、编码、价格
-            goods_json = re.findall(r'var goods_list =(.*?);', response_detail)
-            goods_json_arr = []
-            for goods_item in goods_json:
-                goods_json_arr.append(json.loads(goods_item))
-
-            goods_json_str = json.dumps(goods_json_arr, ensure_ascii=False,)
-            obj['goods_list'] = json.loads(goods_json_str)
-
-            big_obj.append(obj)
-        except IOError:
-            print('错误')
-        else:
-            print(response_detail)
-        # print(obj)
-        # print(obj["sale_link"])
-        # obj["cost_price"] = goods.xpath('./a[2]/div/div/p/span/text()')[0]  # 成本价
-        # print(obj)
-        # break
+        # col.insert(obj)
         # obj['default_img_list'] = detail.xpath('//li[@class="item responsive"]')  # 获取默认轮播图片
 
         # print(obj['default_img_list'])
@@ -134,10 +138,12 @@ while True:
         # model = goods.xpath('./a[1]/img/@data-src')[0]  # 型号
         # print(detail_response.content.decode())
     print(index0,'spider:over')
-    if index0 == 108:
-        json_data = json.dumps(big_obj, ensure_ascii=True) + ',\n'
-        jsonfile.write(json_data)
-        jsonfile.close()
-        break
+
+
+    # 大
+    step_arr = json.dumps(step_arr, ensure_ascii=False)
+    jsonfile.write(step_arr)
+    jsonfile.close()
+
     index0 = index0+1
 
