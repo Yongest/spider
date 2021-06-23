@@ -28,12 +28,12 @@ def get(url):
     return requests.get(domain+url,headers=headers,timeout=30)
 
 
-index0 =77
+index0 =2
 
 
 while True:
     err_link = []
-    jsonfile = open('./data/new_goods_' + str(index0) + '.json', 'w', encoding='utf-8')
+    jsonfile = open('./new_goods_' + str(index0) + '.json', 'w', encoding='utf-8')
     step_arr = []
     response = get('/search?ob=default&page='+str(index0)+'#page_anchor')
     print('页开始第几页：',index0)
@@ -52,8 +52,10 @@ while True:
         obj["sale_link_all"] = domain+str(goods.xpath('./a[1]/@href')[0])  # 销售网址
         obj["sale_link"] = goods.xpath('./a[1]/@href')[0]  # 销售网址
         response_detail_origin = get(obj['sale_link'])
+
         try:
-            response_detail = response_detail_origin.content.decode()
+            response_detail = response_detail_origin.text
+
             detail = etree.HTML(response_detail)
         except:
             print( obj['sale_link'],'orror------------,等待两秒，重新请求')
@@ -139,14 +141,12 @@ while True:
         # # goods_class = goods.xpath('./a[1]/img/@data-src')[0]  # 分类
         # detail = goods.xpath('./a[1]/img/@data-src')[0]  # 详情
 
-
-
         # unit_price = goods.xpath('./a[1]/img/@data-src')[0]  # 单价(必填)
         # size = goods.xpath('./a[1]/img/@data-src')[0]  # 规格
         # model = goods.xpath('./a[1]/img/@data-src')[0]  # 型号
         # print(detail_response.content.decode())
-    print(index0,'spider:over')
 
+    print(index0,'spider:over')
 
     # 大
     step_arr = json.dumps(step_arr, ensure_ascii=False)

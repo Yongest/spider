@@ -16,14 +16,15 @@ book = openpyxl.Workbook()
 sh = book.active
 sh.title = '商品列表'
 
-name_list = ["商品名字", '品牌', '材质', '市场价', '编码', '型号']
+name_list = ["商品名字", '品牌', '材质', '市场价', '编码', '型号','规格','风格','商品链接']
 for index0, item in enumerate(name_list):
     sh.cell(1, index0 + 1).value = item
 
 row = 2
-for index in range(1,113):
+for index in range(1,114):
     print('第',index,'页')
-
+    if index==114:
+        break
     response = requests.get(domain+'new_goods_'+str(index)+'.json')
     json_item = json.loads(response.content.decode())
 
@@ -31,11 +32,13 @@ for index in range(1,113):
     for item in json_item:
         # 获取材质
         material = ''
+        style = ''
         for item2 in item['params']:
             for li in item2['list']:
                 if li['name']=='材质':
                     material = li['value']
-
+                if li['name'] == '风格':
+                    style = li['value']
         # goods_list = json.dumps(item['goods_list'],ensure_ascii=False)
         # print(row)
         priceList = jsonpath.jsonpath(item['goods_list'],'$..market_price')
@@ -43,6 +46,8 @@ for index in range(1,113):
 
         codeList = jsonpath.jsonpath(item['goods_list'],'$..code')
         modelList = jsonpath.jsonpath(item['goods_list'],'$..model')
+        sizelList = jsonpath.jsonpath(item['goods_list'],'$..sku')
+
         # print(codeList,priceList,modelList)
         if priceList and len(priceList):
             for goods_index,goods_item in enumerate(priceList):
@@ -52,8 +57,11 @@ for index in range(1,113):
                 sh.cell(row, 4).value = priceList[goods_index]
                 sh.cell(row, 5).value = codeList[goods_index]
                 sh.cell(row, 6).value = modelList[goods_index]
+                sh.cell(row, 7).value = sizelList[goods_index]
+                sh.cell(row, 8).value = style
+                sh.cell(row, 9).value = item['sale_link_all']
                 row += 1
 
     time.sleep(0.3)
 
-book.save('./data/goods.xlsx')
+book.save('./data/goods_new.xlsx')

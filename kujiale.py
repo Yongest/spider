@@ -1,6 +1,9 @@
 # coding=utf-8
 # Version:Python 3.8.0
 # Tools:PyCharm 2020.2 x64
+'''
+酷家乐爬虫项目
+'''
 __date__ = '2021/5/6 19:14'
 __author__ = '张勇'
 
