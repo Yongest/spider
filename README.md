@@ -11,7 +11,7 @@ https://www.cnblogs.com/hisweety/p/13324146.html
     ufw alow 22
     sudo ufw deny 65000
     ufw [--dry-run] enable | disable | reload
- 
+
 ### 5.pymongo 连接不上远程  mongodb
     mongodb 配置文件开启端口，ip访问
     防火墙开启 27017端口
@@ -21,3 +21,14 @@ https://www.cnblogs.com/hisweety/p/13324146.html
 ### 6.启动： scrapy crawl itcast --nolog
 
 ### 7.mongo启动失败 https://blog.csdn.net/guo_qiangqiang/article/details/88105449
+
+### 8.有时使用这个方法response.content.decode()   解码HTML，会报错。使用response.text替代
+
+### 目前存在的问题：
+
+1.requests 超时连接不上后，没有相应的回调
+
+2.try catch 异常处理
+
+
+
