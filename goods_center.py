@@ -9,28 +9,33 @@ import json
 import time
 
 from lxml import etree
+
+
+
+
+
+
 domain = 'https://www.jiazhuangpei.com'
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3861.400 QQBrowser/10.7.4313.400',
-    'Cookie': 'PHPSESSID=dd8f7f1bdcf0c216a4fee0f82d3435f7; SERVERID=44eaeffc8bad2a92fe4cdc77619b902d|1621175211|1621175'
+    'Cookie': 'PHPSESSID=694ea744436a0c25c4d791e85853233b; SERVERID=276a4c00a3911cb99ff5f8f9680ce2e8|1624410147|1624410122'
 }
-# 94 60
-# 92 20
-# 2  30
+
+# 2  28
 
 def get(url):
     return requests.get(domain+url,headers=headers,timeout=30)
 
 
-index0 = 3
+index0 =77
 
 
 while True:
     err_link = []
     jsonfile = open('./data/new_goods_' + str(index0) + '.json', 'w', encoding='utf-8')
     step_arr = []
-    response = get('/to-kzz/search?ob=default&page='+str(index0)+'#page_anchor')
+    response = get('/search?ob=default&page='+str(index0)+'#page_anchor')
     print('页开始第几页：',index0)
     # while True:
     response = response.content.decode()
